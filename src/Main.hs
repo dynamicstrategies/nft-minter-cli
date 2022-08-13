@@ -1,3 +1,7 @@
+{- ########################################
+ BOILER PLATE CODE - START
+ ########################################## -}
+
 {-# LANGUAGE DataKinds           #-}
 {-# LANGUAGE DeriveAnyClass      #-}
 {-# LANGUAGE DeriveGeneric       #-}
@@ -19,9 +23,6 @@
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 
 module Main where
-
--- import GHC.Generics (Generic)
--- import Prelude hiding (($))
 
 -- Haskell Imports
 import Codec.Serialise
@@ -56,6 +57,12 @@ import Plutus.V1.Ledger.Contexts (TxOutRef(..), TxInfo(..), TxInInfo(..))
 import Utils (handleHexConversion)
 import WriteTypedData (typedDataToJSON)
 
+{- ########################################
+ BOILER PLATE CODE - END
+ ########################################## -}
+
+ 
+
 data NftParams = NftParams
         { 
           nftTokenName  :: TokenName
@@ -63,6 +70,9 @@ data NftParams = NftParams
         , nftTxOutRef   :: TxOutRef
         } 
     deriving (Prelude.Show)
+
+
+--- Essential Smart contract Logic below ----
 
 
 {-# INLINABLE mkPolicyNft #-}
@@ -80,6 +90,21 @@ mkPolicyNft nftParams _ ctx = traceIfFalse "UTxO not consumed"   hasUTxO        
     checkMintedAmount = case flattenValue (txInfoMint info) of
         [(_, tn', amt')] -> tn' == nftTokenName nftParams && amt' == nftAmount nftParams
         _                -> False
+
+
+--- Essential Smart contract Logic above ----
+
+
+{- ########################################
+ 
+ BOILER PLATE CODE - STARTS
+ 
+ If you leave the below part alone it should just work
+ That code takes care of converting Haskell into Plutus core
+ And generating the CBORHex , PlolicyIds ...
+
+
+ ########################################## -}
 
 policy :: NftParams -> MintingPolicy
 policy nftParams = mkMintingPolicyScript $ 
@@ -120,26 +145,6 @@ PlutusTx.unstableMakeIsData ''ContractRedeemer
 
 
 
-----------
-
--- txHash' :: String
--- txHash' = "c8650bafb70de1caf55b1c66c7aee396225a82dbf7eeb71a9d8ad1f2cf1064dd"
-
--- txIx' :: Integer
--- txIx' = 0
-
--- toTXOutRef :: String -> Integer -> TxOutRef
--- toTXOutRef txh txix = TxOutRef (TxId $ handleHexConversion txh) txix
-
--- nftTxOutRef' :: TxOutRef
--- nftTxOutRef' = toTXOutRef txHash' txIx'
-
--- nftParams = NftParams { 
---         nftTokenName = "HEY"
---       , nftTxOutRef = nftTxOutRef'
---       }
-
-
 main :: Prelude.IO ()
 main = do
     args <- getArgs
@@ -147,8 +152,6 @@ main = do
     let txIx = read (args Prelude.!!1) :: Integer
     let nftTokenName' = TokenName $ stringToBuiltinByteString $ args Prelude.!!2
     let nftAmount' = read (args Prelude.!!3) :: Integer
-
-    
 
     let nftParams = NftParams { 
         nftTokenName = nftTokenName'
