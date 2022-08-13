@@ -11,10 +11,10 @@ set -o pipefail
 # Set NFT Parameters
 TOKEN_DESCRIPT="Genesis Cardano Beam Event"
 TOKEN_NAME="Lisbon Algarve 2022"
-IPFS_LINK="ipfs://QmPFafbDR17zCsrBYgj7awk4K9cqNsKjNoRPTSm9sXxdrZ"
+IPFS_LINK="ipfs://QmVaUwbA63nepvWJpAAVZi1xnKjB3rz4yXHFd3WvWW17Jp"
 TOKEN_AMOUNT=7 # How many tokens to mint
 
-WALLET_TXHASH=dd735042ee711aaacd21f55c155e448fe67b3c4fa550285f605852b419565d42 # find a suitable UTXO TxHash
+WALLET_TXHASH=5178864ffe290059984ebe18d3bd2cc2ccb0101ab32050caf57ebda581346e50 # find a suitable UTXO TxHash
 WALLET_TXIX=0 # find a suitable UTXO TxIx
 COLLATERAL_TX=58d5fb261fda9d8e4fea9dbcd8cc98b16e4cba566da47ab2423c9e99b2616f6c#0 # Set a UTXO with at least 5 ADA to be used as Collateral
 
